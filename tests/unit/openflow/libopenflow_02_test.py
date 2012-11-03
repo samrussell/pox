@@ -63,8 +63,21 @@ class ofp_match_test(unittest.TestCase):
     # create match from packet
     match = ofp_match.from_packet(packet)
     
+    #print match.dl_src
+    #print match.dl_src_mask
+    #print match.dl_dst
+    #print match.dl_dst_mask
+    #print match.nw_src
+    #print match.nw_src_mask
+    #print match.nw_dst
+    #print match.nw_dst_mask
+    #print match.mpls_label
+    #print match.mpls_tc
+    
     self.assertEquals(match.dl_src, dl_src)
     self.assertEquals(match.dl_dst, dl_dst)
+    self.assertEquals(match.nw_src, nw_src)
+    self.assertEquals(match.nw_dst, nw_dst)
     self.assertEquals(match.mpls_label, mpls_label)
     self.assertEquals(match.mpls_tc, mpls_tc)
   

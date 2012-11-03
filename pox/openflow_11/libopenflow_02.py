@@ -865,11 +865,14 @@ class ofp_match (ofp_base):
     match.dl_dst_mask = EthAddr(b"\xff\xff\xff\xff\xff\xff")
     match.dl_type = packet.type
     p = packet.next
+    
     # test MPLS before VLANs
     if isinstance(p, mpls):
       match.mpls_label = p.label
       match.mpls_tc = p.tc
+      match.dl_type = 0x0800
       p = p.next
+    
     if isinstance(p, vlan):
       match.dl_type = p.eth_type
       match.dl_vlan = p.id
@@ -1025,6 +1028,9 @@ class ofp_match (ofp_base):
 
     return (ip, b)
 
+# both of these need modifying for openflow 1.1
+# how to handle that masks are now in the same set as these?
+
   def __setattr__ (self, name, value):
     if name not in ofp_match_data:
       self.__dict__[name] = value
@@ -1047,10 +1053,11 @@ class ofp_match (ofp_base):
 
   def __getattr__ (self, name):
     if name in ofp_match_data:
-      if ( (self.wildcards & ofp_match_data[name][1])
-           == ofp_match_data[name][1] ):
+      #if ( (self.wildcards & ofp_match_data[name][1])
+      #     == ofp_match_data[name][1] ):
         # It's wildcarded -- always return None
-        return None
+        # ignore wildcards
+        #return None
       if name == 'nw_dst' or name == 'nw_src':
         # Special handling
         return getattr(self, 'get_' + name)()[0]
