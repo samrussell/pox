@@ -2207,6 +2207,21 @@ class ofp_flow_mod (ofp_header):
           *more than just a single ofp_flow_mod* in packed form.
           Specifically, it may also have a barrier and an ofp_packet_out.
     """
+    # of 1.0:
+    # struct ofp_header header
+    # struct ofp_match match
+    # uint64_t cookie
+    # uint16_t command
+    # uint16_t idle_timeout
+    # uint16_t hard_timeout
+    # uint16_t priority
+    # uint32_t buffer_id
+    # uint16_t out_port
+    # uint16_t flags
+    # struct ofp_action_header actions[0]
+    #
+    #
+    
     po = None
     if self.data:
       #TODO: It'd be nice to log and then ignore if not data_is_complete.
