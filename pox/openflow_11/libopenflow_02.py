@@ -2220,6 +2220,22 @@ class ofp_flow_mod (ofp_header):
     # uint16_t flags
     # struct ofp_action_header actions[0]
     #
+    # of 1.1:
+    # struct ofp_header header
+    # uint64_t cookie
+    # uint64_t cookie_mask
+    # uint8_t table_id
+    # uint8_t command
+    # uint16_t idle_timeout
+    # uint16_t hard_timeout
+    # uint16_t priority
+    # uint32_t buffer_id
+    # uint32_t out_port
+    # uint32_t out_group
+    # uint16_t flags
+    # uint8_t pad[2]
+    # struct ofp_match match
+    # struct ofp_instruction instructions[0]
     #
     
     po = None
@@ -2240,8 +2256,11 @@ class ofp_flow_mod (ofp_header):
     assert self._assert()
     packed = ""
     packed += ofp_header.pack(self)
+    # do match later
+    # packed += self.match.pack(flow_mod=True)
+    packed += struct.pack("!QQBBHHHLLLHH", self.cookie, self.cookie_mask, self.table_id, self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.out_group, self.flags, 0)
     packed += self.match.pack(flow_mod=True)
-    packed += struct.pack("!QHHHHLLH", self.cookie, self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.flags)
+    # no actions, do instructions
     for i in self.actions:
       packed += i.pack()
 
@@ -2251,12 +2270,16 @@ class ofp_flow_mod (ofp_header):
     return packed
 
   def unpack (self, binaryString):
+    # fix up for actual length of 136
     if (len(binaryString) < 72):
       return binaryString
     ofp_header.unpack(self, binaryString[0:])
-    self.match.unpack(binaryString[8:], flow_mod=True)
-    (self.cookie, self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.flags) = struct.unpack_from("!QHHHHLHH", binaryString, 8 + len(self.match))
-    self.actions, offset = _unpack_actions(binaryString, self._length-(32 + len(self.match)), 32 + len(self.match))
+    # match at end just before instruction
+    #self.match.unpack(binaryString[8:], flow_mod=True)
+    (self.cookie, self.cookie_mask, self.table_id self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.out_group, self.flags) = struct.unpack_from("!QQBBHHHLLLHH", binaryString, 8)
+    self.match.unpack(binaryString[40:], flow_mod=True)
+    # sort instructions now
+    #self.actions, offset = _unpack_actions(binaryString, self._length-(32 + len(self.match)), 32 + len(self.match))
     assert offset == self._length
     return binaryString[offset:]
 
