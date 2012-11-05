@@ -218,6 +218,7 @@ _action_class_to_types = {} # Do we need this?
 ofp_action_type_rev_map = {}
 ofp_action_type_map = {}
 
+# needs an "openflow_instruction" version for decoding types?
 def openflow_action (action_type, type_val):
   ofp_action_type_rev_map[action_type] = type_val
   ofp_action_type_map[type_val] = action_type
@@ -422,6 +423,17 @@ ofp_flow_mod_command_rev_map = {
   'OFPFC_DELETE_STRICT' : 4,
 }
 
+# instructions enum for openflow 1.1
+
+ofp_instruction_type_rev_map = {
+  'OFPIT_GOTO_TABLE'           : 1
+  'OFPIT_WRITE_METADATA'       : 2,
+  'OFPIT_WRITE_ACTIONS'        : 3,
+  'OFPIT_APPLY_ACTIONS'        : 4,
+  'OFPIT_CLEAR_ACTIONS'        : 5,
+  'OFPIT_EXPERIMENTER'         : 0xFFFF,
+}
+
 ofp_flow_mod_flags_rev_map = {
   'OFPFF_SEND_FLOW_REM' : 1 << 0,
   'OFPFF_CHECK_OVERLAP' : 1 << 1,
@@ -575,6 +587,117 @@ class ofp_stats_body_base (ofp_base):
   # don't need to set this yourself -- the openflow_stats_XXX
   # decorator will do it for you.
   _type = None
+
+# let's steal ofp_action style stuff for ofp_instructions
+
+class ofp_instruction_base (ofp_base):
+  """
+  Base class for instructions
+  """
+  type = None
+
+class ofp_instruction_generic (ofp_instruction_base):
+  _MIN_LENGTH = 8
+  def __init__ (self, **kw):
+    self.type = None # Deliberately bad
+    self.data = _PAD4
+
+    initHelper(self, kw)
+
+  def pack (self):
+    assert self._assert()
+
+    packed = ""
+    packed += struct.pack("!HH", self.type, len(self))
+    packed += _PAD4 # Pad
+    return packed
+
+  def unpack (self, binaryString):
+    if (len(binaryString) < 8):
+      return binaryString
+    (self.type, length) = struct.unpack_from("!HH", binaryString, 0)
+    if len(binaryString) < length: return binaryString
+    self.data = binaryString[4:4+length]
+    return binaryString[length:]
+
+  def __len__ (self):
+    return 4 + len(self.data)
+
+  def __eq__ (self, other):
+    if type(self) != type(other): return False
+    if self.type != other.type: return False
+    return True
+
+  def __ne__ (self, other): return not self.__eq__(other)
+
+  def show (self, prefix=''):
+    outstr = ''
+    outstr += prefix + 'type: ' + str(self.type) + '\n'
+    outstr += prefix + 'len: ' + str(len(self)) + '\n'
+    return outstr
+    
+class ofp_instruction_goto_table (ofp_instruction_base):
+  @classmethod
+  def goto_table (cls, table_id = None):
+    return cls(OFPIT_GOTO_TABLE, table_id)
+
+  def __init__ (self, type = None, table_id = None):
+    """
+    'type' should be OFPIT_GOTO_TABLE
+    """
+    self.type = type
+    self.table_id = 0
+
+    if table_id is not None:
+      self.table_id = table_id
+
+  def _validate (self):
+    # basically just check that table_id is 8-bit unsigned?
+    #if (not isinstance(self.dl_addr, EthAddr)
+    #    and not isinstance(self.dl_addr, bytes)):
+    #  return "dl_addr is not string or EthAddr"
+    #if isinstance(self.dl_addr, bytes) and len(self.dl_addr) != 6:
+    #  return "dl_addr is not of size 6"
+    return None
+
+  def pack (self):
+    assert self._assert()
+
+    packed = ""
+    packed += struct.pack("!HH", self.type, len(self))
+    if isinstance(self.dl_addr, EthAddr):
+      packed += self.dl_addr.toRaw()
+    else:
+      packed += self.dl_addr
+    packed += _PAD6
+    return packed
+
+  def unpack (self, binaryString):
+    if (len(binaryString) < 16):
+      return binaryString
+    (self.type, length) = struct.unpack_from("!HH", binaryString, 0)
+    self.dl_addr = EthAddr(struct.unpack_from("!BBBBBB", binaryString, 4))
+    return binaryString[16:]
+
+  @staticmethod
+  def __len__ ():
+    return 16
+
+  def __eq__ (self, other):
+    if type(self) != type(other): return False
+    if self.type != other.type: return False
+    if len(self) != len(other): return False
+    if self.dl_addr != other.dl_addr: return False
+    return True
+
+  def __ne__ (self, other): return not self.__eq__(other)
+
+  def show (self, prefix=''):
+    outstr = ''
+    outstr += prefix + 'type: ' + str(self.type) + '\n'
+    outstr += prefix + 'len: ' + str(len(self)) + '\n'
+    outstr += prefix + 'dl_addr: ' + str(self.dl_addr) + '\n'
+    return outstr
 
 
 class ofp_action_base (ofp_base):
