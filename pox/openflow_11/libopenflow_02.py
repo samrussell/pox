@@ -426,7 +426,7 @@ ofp_flow_mod_command_rev_map = {
 # instructions enum for openflow 1.1
 
 ofp_instruction_type_rev_map = {
-  'OFPIT_GOTO_TABLE'           : 1
+  'OFPIT_GOTO_TABLE'           : 1,
   'OFPIT_WRITE_METADATA'       : 2,
   'OFPIT_WRITE_ACTIONS'        : 3,
   'OFPIT_APPLY_ACTIONS'        : 4,
@@ -2399,7 +2399,7 @@ class ofp_flow_mod (ofp_header):
     ofp_header.unpack(self, binaryString[0:])
     # match at end just before instruction
     #self.match.unpack(binaryString[8:], flow_mod=True)
-    (self.cookie, self.cookie_mask, self.table_id self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.out_group, self.flags) = struct.unpack_from("!QQBBHHHLLLHH", binaryString, 8)
+    (self.cookie, self.cookie_mask, self.table_id, self.command, self.idle_timeout, self.hard_timeout, self.priority, self._buffer_id, self.out_port, self.out_group, self.flags) = struct.unpack_from("!QQBBHHHLLLHH", binaryString, 8)
     self.match.unpack(binaryString[40:], flow_mod=True)
     # sort instructions now
     #self.actions, offset = _unpack_actions(binaryString, self._length-(32 + len(self.match)), 32 + len(self.match))
