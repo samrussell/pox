@@ -183,6 +183,8 @@ class ofp_match_test(unittest.TestCase):
     assertMatch(create(nw_src="10.0.0.0/25"), create(nw_src="10.0.0.127"))
     assertNoMatch(create(nw_src="10.0.0.0/25"), create(nw_src="10.0.0.128"))
 
+# needs to be updated for openflow 1.1
+# double-check that this is all of the messages
 class ofp_command_test(unittest.TestCase):
   # custom map of POX class to header type, for validation
   ofp_type = {
@@ -210,6 +212,24 @@ class ofp_command_test(unittest.TestCase):
     ofp_get_config_reply: OFPT_GET_CONFIG_REPLY,
     ofp_set_config: OFPT_SET_CONFIG
     }
+    
+    
+  def test_mpls_tag_swap(self):
+    # we want to create a flow to match on mpls tags and make sure it works
+    # match on tag 45, make it swap to tag 23 and output on port 4
+    msg = ofp_flow_mod(xid=2)
+    msg.match.mpls_label = 45
+    
+    action_tagswap = ofp_action_mpls_label(mpls_label = 23)
+    action_output = ofp_action_output(port = 4)
+    # set up instruction now that we have actions
+    instruction = ofp_instruction_actions.apply_actions(actions = [action_tagswap, action_output])
+    msg.instructions.append(instruction)
+
+    # try packing and unpacking msg?
+    self._test_pack_unpack(msg, 2)
+
+# need to test mpls tag pushing and popping too
 
   def assert_packed_header(self, pack, ofp_type, length, xid):
     """ check openflow header fields in packed byte array """
@@ -352,12 +372,16 @@ class ofp_command_test(unittest.TestCase):
         for command in ( OFPFC_ADD, OFPFC_DELETE, OFPFC_DELETE_STRICT, OFPFC_MODIFY_STRICT, OFPFC_MODIFY_STRICT ):
           for attrs in ( {}, { 'buffer_id' : 123 }, { 'idle_timeout': 5, 'hard_timeout': 10 } ):
             xid = xid_gen()
-            o = ofp_flow_mod(xid=xid, command=command, match = match, actions=actions, **attrs)
+            # just wrap actions in OFPIT_APPLY_ACTIONS for the time being
+            instruction1 = ofp_instruction_actions.apply_actions(actions)
+            instructions = [instruction1]
+            o = ofp_flow_mod(xid=xid, command=command, match = match, instructions=instructions, **attrs)
+            # test the instructions
             unpacked = self._test_pack_unpack(o, xid, OFPT_FLOW_MOD)
 
             self.assertEqual(unpacked.match, match)
             self.assertEqual(unpacked.command, command)
-            self.assertEqual(unpacked.actions, actions)
+            self.assertEqual(unpacked.instructions, instructions)
             for (check_attr,val) in attrs.iteritems():
               self.assertEqual(getattr(unpacked, check_attr), val)
 
@@ -380,8 +404,11 @@ class ofp_action_test(unittest.TestCase):
       return packed
 
 
-    c(ofp_action_output, OFPAT_OUTPUT, { 'port': 23 }, 8 )
-    c(ofp_action_enqueue, OFPAT_ENQUEUE, { 'port': 23, 'queue_id': 1 }, 16 )
+    # needs updating for openflow 1.1
+    # add all of the new actions (MPLS etc)
+    # 16-byte ofp_action_output in openflow 1.1
+    c(ofp_action_output, OFPAT_OUTPUT, { 'port': 23 }, 16 )
+    c(ofp_action_set_queue, OFPAT_SET_QUEUE, { 'queue_id': 1 }, 8 )
     c(ofp_action_vlan_vid, OFPAT_SET_VLAN_VID, { 'vlan_vid' : 123}, 8 )
     c(ofp_action_vlan_pcp, OFPAT_SET_VLAN_PCP, { 'vlan_pcp' : 123}, 8 )
     p = c(ofp_action_dl_addr.set_dst, OFPAT_SET_DL_DST, { 'dl_addr' : EthAddr("01:02:03:04:05:06").toRaw() }, 16 )
