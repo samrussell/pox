@@ -54,10 +54,46 @@ class ofp_const_test(unittest.TestCase):
       "OFPT_ROLE_REQUEST" : 24,
       "OFPT_ROLE_REPLY" : 25,
     }
-    # iterate over ofp_type_map
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in ofp_type_map, "Const %s not in ofp_type_map" % expected)
       self.assertEquals(ofp_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_type_map[expected]))
+  
+  def test_ofp_port_config(self):
+    testpairs = {
+      "OFPPC_PORT_DOWN" : 1 << 0,
+      "OFPPC_NO_RECV" : 1 << 2,
+      "OFPPC_NO_FWD" : 1 << 5,
+      "OFPPC_NO_PACKET_IN" : 1 << 6,
+    }
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_port_config_map, "Const %s not in ofp_port_config_map" % expected)
+      self.assertEquals(ofp_port_config_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_config_map[expected]))
+  
+  def test_ofp_port_state(self):
+    testpairs = {
+      "OFPPS_LINK_DOWN" : 1 << 0,
+      "OFPPS_BLOCKED" : 1 << 1,
+      "OFPPS_LIVE" : 1 << 2,
+    }
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_port_state_map, "Const %s not in ofp_port_state_map" % expected)
+      self.assertEquals(ofp_port_state_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_state_map[expected]))
+  
+  def test_ofp_port_no(self):
+    testpairs = {
+      "OFPP_MAX" : 0xffffff00,
+      "OFPP_IN_PORT" : 0xfffffff8,
+      "OFPP_TABLE" : 0xfffffff9,
+      "OFPP_NORMAL" : 0xfffffffa,
+      "OFPP_FLOOD" : 0xfffffffb,
+      "OFPP_ALL" : 0xfffffffc,
+      "OFPP_CONTROLLER" : 0xfffffffd,
+      "OFPP_LOCAL" : 0xfffffffe,
+      "OFPP_ANY" : 0xffffffff,
+    }
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_port_no_map, "Const %s not in ofp_port_no_map" % expected)
+      self.assertEquals(ofp_port_no_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_no_map[expected]))
       
 
 class ofp_match_test(unittest.TestCase):

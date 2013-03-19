@@ -490,9 +490,10 @@ ofp_port_reason_rev_map = {
   'OFPPR_MODIFY' : 1 << 1,
 }
 
-# updated for openflow 1.1
+# updated for openflow 1.2
 
-ofp_port_rev_map = {
+# name changed from ofp_port_rev_map - may cause bugs elsewhere...
+ofp_port_no_rev_map = {
   'OFPP_MAX'        : 0xFFFFFF00,
   'OFPP_IN_PORT'    : 0xFFFFFFF8,
   'OFPP_TABLE'      : 0xFFFFFFF9,
