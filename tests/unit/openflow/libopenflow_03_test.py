@@ -54,6 +54,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPT_ROLE_REQUEST" : 24,
       "OFPT_ROLE_REPLY" : 25,
     }
+    testobj = "ofp_type_map"
+    self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in ofp_type_map, "Const %s not in ofp_type_map" % expected)
       self.assertEquals(ofp_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_type_map[expected]))
@@ -65,6 +67,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPPC_NO_FWD" : 1 << 5,
       "OFPPC_NO_PACKET_IN" : 1 << 6,
     }
+    self.assertTrue("ofp_port_config_map" in globals())
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in ofp_port_config_map, "Const %s not in ofp_port_config_map" % expected)
       self.assertEquals(ofp_port_config_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_config_map[expected]))
@@ -75,6 +78,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPPS_BLOCKED" : 1 << 1,
       "OFPPS_LIVE" : 1 << 2,
     }
+    self.assertTrue("ofp_port_state_map" in globals())
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in ofp_port_state_map, "Const %s not in ofp_port_state_map" % expected)
       self.assertEquals(ofp_port_state_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_state_map[expected]))
@@ -91,10 +95,67 @@ class ofp_const_test(unittest.TestCase):
       "OFPP_LOCAL" : 0xfffffffe,
       "OFPP_ANY" : 0xffffffff,
     }
+    self.assertTrue("ofp_port_no_map" in globals())
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in ofp_port_no_map, "Const %s not in ofp_port_no_map" % expected)
       self.assertEquals(ofp_port_no_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_no_map[expected]))
-      
+  
+  def test_ofp_port_features(self):
+    testpairs = {
+      "OFPPF_10MB_HD" : 1 << 0,
+      "OFPPF_10MB_FD" : 1 << 1,
+      "OFPPF_100MB_HD" : 1 << 2,
+      "OFPPF_100MB_FD" : 1 << 3,
+      "OFPPF_1GB_HD" : 1 << 4,
+      "OFPPF_1GB_FD" : 1 << 5,
+      "OFPPF_10GB_FD" : 1 << 6,
+      "OFPPF_40GB_FD" : 1 << 7,
+      "OFPPF_100GB_FD" : 1 << 8,
+      "OFPPF_1TB_FD" : 1 << 9,
+      "OFPPF_OTHER" : 1 << 10,
+      "OFPPF_COPPER" : 1 << 11,
+      "OFPPF_FIBER" : 1 << 12,
+      "OFPPF_AUTONEG" : 1 << 13,
+      "OFPPF_PAUSE" : 1 << 14,
+      "OFPPF_PAUSE_ASYM" : 1 << 15,
+    }
+    self.assertTrue("ofp_port_features_map" in globals())
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_port_features_map, "Const %s not in ofp_port_features_map" % expected)
+      self.assertEquals(ofp_port_features_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_features_map[expected]))
+  
+  def test_ofp_queue_properties(self):
+    testpairs = {
+      "OFPQT_MIN_RATE" : 1,
+      "OFPQT_MAX_RATE" : 2,
+      "OFPQT_EXPERIMENTER" : 0xffff,
+    }
+    self.assertTrue("ofp_queue_properties_map" in globals())
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_queue_properties_map, "Const %s not in ofp_queue_properties_map" % expected)
+      self.assertEquals(ofp_queue_properties_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_queue_properties_map[expected]))
+  
+  def test_ofp_match_type(self):
+    testpairs = {
+      "OFPMT_STANDARD" : 0,
+      "OFPMT_OXM" : 1,
+    }
+    self.assertTrue("ofp_match_type_map" in globals())
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_match_type_map, "Const %s not in ofp_match_type_map" % expected)
+      self.assertEquals(ofp_match_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_match_type_map[expected]))
+  
+  def test_ofp_oxm_class(self):
+    testpairs = {
+      "OFPXMC_NXM_0" : 0x0000,
+      "OFPXMC_NXM_1" : 0x0001,
+      "OFPXMC_NXM_OPENFLOW_BASIC" : 0x8000,
+      "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
+    }
+    self.assertTrue("ofp_oxm_class_map" in globals())
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_oxm_class_map, "Const %s not in ofp_oxm_class_map" % expected)
+      self.assertEquals(ofp_oxm_class_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_oxm_class_map[expected]))
 
 class ofp_match_test(unittest.TestCase):
   
