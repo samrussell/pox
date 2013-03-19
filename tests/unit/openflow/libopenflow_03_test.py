@@ -24,6 +24,9 @@ def extract_num(buf, start, length):
 
 class ofp_const_test(unittest.TestCase):
   # get this test to check all constants
+  # at the moment we don't find constants that shouldn't be set
+  # e.g. we need a test to fail when it finds OFPAT_SET_VLAN_VID that is
+  # valid in OF1.1 but not in OF1.2
   
   def runtests(self, testpairs, testobj):
     self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
@@ -146,6 +149,107 @@ class ofp_const_test(unittest.TestCase):
       "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
     }
     testobj = "ofp_oxm_class_map"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_oxm_class(self):
+    testpairs = {
+      "OFPXMC_NXM_0" : 0x0000,
+      "OFPXMC_NXM_1" : 0x0001,
+      "OFPXMC_NXM_OPENFLOW_BASIC" : 0x8000,
+      "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
+    }
+    testobj = "ofp_oxm_class_map"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_oxm_ofb_match_field(self):
+    testpairs = {
+      "OFPXMT_OFB_IN_PORT" : 0,
+      "OFPXMT_OFB_IN_PHY_PORT" : 1,
+      "OFPXMT_OFB_METADATA" : 2,
+      "OFPXMT_OFB_ETH_DST" : 3,
+      "OFPXMT_OFB_ETH_SRC" : 4,
+      "OFPXMT_OFB_ETH_TYPE" : 5,
+      "OFPXMT_OFB_VLAN_VID" : 6,
+      "OFPXMT_OFB_VLAN_PCP" : 7,
+      "OFPXMT_OFB_IP_DSCP" : 8,
+      "OFPXMT_OFB_IP_ECN" : 9,
+      "OFPXMT_OFB_IP_PROTO" : 10,
+      "OFPXMT_OFB_IPV4_SRC" : 11,
+      "OFPXMT_OFB_IPV4_DST" : 12,
+      "OFPXMT_OFB_TCP_SRC" : 13,
+      "OFPXMT_OFB_TCP_DST" : 14,
+      "OFPXMT_OFB_UDP_SRC" : 15,
+      "OFPXMT_OFB_UDP_DST" : 16,
+      "OFPXMT_OFB_SCTP_SRC" : 17,
+      "OFPXMT_OFB_SCTP_DST" : 18,
+      "OFPXMT_OFB_ICMPV4_TYPE" : 19,
+      "OFPXMT_OFB_ICMPV4_CODE" : 20,
+      "OFPXMT_OFB_ARP_OP" : 21,
+      "OFPXMT_OFB_ARP_SPA" : 22,
+      "OFPXMT_OFB_ARP_TPA" : 23,
+      "OFPXMT_OFB_ARP_SHA" : 24,
+      "OFPXMT_OFB_ARP_THA" : 25,
+      "OFPXMT_OFB_IPV6_SRC" : 26,
+      "OFPXMT_OFB_IPV6_DST" : 27,
+      "OFPXMT_OFB_IPV6_FLABEL" : 28,
+      "OFPXMT_OFB_ICMPV6_TYPE" : 29,
+      "OFPXMT_OFB_ICMPV6_CODE" : 30,
+      "OFPXMT_OFB_IPV6_ND_TARGET" : 31,
+      "OFPXMT_OFB_IPV6_ND_SLL" : 32,
+      "OFPXMT_OFB_IPV6_ND_TLL" : 33,
+      "OFPXMT_OFB_MPLS_LABEL" : 34,
+      "OFPXMT_OFB_MPLS_TC" : 35,
+    }
+    testobj = "ofp_oxm_ofb_match_field"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_vlan_id(self):
+    testpairs = {
+      "OFPVID_PRESENT" : 0x1000,
+      "OFPVID_NONE" : 0x0000,
+    }
+    testobj = "ofp_vlan_id"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_instruction_type(self):
+    testpairs = {
+      "OFPIT_GOTO_TABLE" : 1,
+      "OFPIT_WRITE_METADATA" : 2,
+      "OFPIT_WRITE_ACTIONS" : 3,
+      "OFPIT_APPLY_ACTIONS" : 4,
+      "OFPIT_CLEAR_ACTIONS" : 5,
+      "OFPIT_EXPERIMENTER" : 0xFFFF,
+    }
+    testobj = "ofp_instruction_type"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_action_type(self):
+    testpairs = {
+      "OFPAT_OUTPUT" : 1,
+      "OFPAT_COPY_TTL_OUT" : 11,
+      "OFPAT_COPY_TTL_IN" : 12,
+      "OFPAT_SET_MPLS_TTL" : 15,
+      "OFPAT_DEC_MPLS_TTL" : 16,
+      "OFPAT_PUSH_VLAN" : 17,
+      "OFPAT_POP_VLAN" : 18,
+      "OFPAT_PUSH_MPLS" : 19,
+      "OFPAT_POP_MPLS" : 20,
+      "OFPAT_SET_QUEUE" : 21,
+      "OFPAT_GROUP" : 22,
+      "OFPAT_SET_NW_TTL" : 23,
+      "OFPAT_DEC_NW_TTL" : 24,
+      "OFPAT_SET_FIELD" : 25,
+      "OFPAT_EXPERIMENTER" : 0xffff,
+    }
+    testobj = "ofp_action_type"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_controller_max_len(self):
+    testpairs = {
+      "OFPCML_MAX" : 0xffe5,
+      "OFPCML_NO_BUFFER" : 0xffff,
+    }
+    testobj = "ofp_controller_max_len"
     self.runtests(testpairs, testobj)
 
 class ofp_match_test(unittest.TestCase):
