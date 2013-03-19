@@ -21,6 +21,45 @@ def extract_num(buf, start, length):
     val += ord(buf[i])
   return val
 
+
+class ofp_const_test(unittest.TestCase):
+  # get this test to check all constants
+  
+  def test_ofp_type(self):
+    testpairs = {
+      "OFPT_HELLO" : 0,
+      "OFPT_ERROR" : 1,
+      "OFPT_ECHO_REQUEST" : 2,
+      "OFPT_ECHO_REPLY" : 3,
+      "OFPT_EXPERIMENTER" : 4,
+      "OFPT_FEATURES_REQUEST" : 5,
+      "OFPT_FEATURES_REPLY" : 6,
+      "OFPT_GET_CONFIG_REQUEST" : 7,
+      "OFPT_GET_CONFIG_REPLY" : 8,
+      "OFPT_SET_CONFIG" : 9,
+      "OFPT_PACKET_IN" : 10,
+      "OFPT_FLOW_REMOVED" : 11,
+      "OFPT_PORT_STATUS" : 12,
+      "OFPT_PACKET_OUT" : 13,
+      "OFPT_FLOW_MOD" : 14,
+      "OFPT_GROUP_MOD" : 15,
+      "OFPT_PORT_MOD" : 16,
+      "OFPT_TABLE_MOD" : 17,
+      "OFPT_STATS_REQUEST" : 18,
+      "OFPT_STATS_REPLY" : 19,
+      "OFPT_BARRIER_REQUEST" : 20,
+      "OFPT_BARRIER_REPLY" : 21,
+      "OFPT_QUEUE_GET_CONFIG_REQUEST" : 22,
+      "OFPT_QUEUE_GET_CONFIG_REPLY" : 23,
+      "OFPT_ROLE_REQUEST" : 24,
+      "OFPT_ROLE_REPLY" : 25,
+    }
+    # iterate over ofp_type_map
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in ofp_type_map, "Const %s not in ofp_type_map" % expected)
+      self.assertEquals(ofp_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_type_map[expected]))
+      
+
 class ofp_match_test(unittest.TestCase):
   
   def test_mpls_match(self):
