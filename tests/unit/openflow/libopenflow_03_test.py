@@ -25,6 +25,14 @@ def extract_num(buf, start, length):
 class ofp_const_test(unittest.TestCase):
   # get this test to check all constants
   
+  def runtests(self, testpairs, testobj):
+    self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
+    testmap = globals()[testobj]
+    for const, expected in testpairs.iteritems():
+      self.assertTrue(expected in testmap, "Const %s not in %s" % (expected, testobj))
+      self.assertEquals(testmap[expected], const, "Const %s should be %s, but %s is" % (const, expected, testmap[expected]))
+    
+  
   def test_ofp_type(self):
     testpairs = {
       "OFPT_HELLO" : 0,
@@ -55,10 +63,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPT_ROLE_REPLY" : 25,
     }
     testobj = "ofp_type_map"
-    self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_type_map, "Const %s not in ofp_type_map" % expected)
-      self.assertEquals(ofp_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_type_map[expected]))
+    self.runtests(testpairs, testobj)
   
   def test_ofp_port_config(self):
     testpairs = {
@@ -67,10 +72,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPPC_NO_FWD" : 1 << 5,
       "OFPPC_NO_PACKET_IN" : 1 << 6,
     }
-    self.assertTrue("ofp_port_config_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_port_config_map, "Const %s not in ofp_port_config_map" % expected)
-      self.assertEquals(ofp_port_config_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_config_map[expected]))
+    testobj = "ofp_port_config_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_port_state(self):
     testpairs = {
@@ -78,10 +81,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPPS_BLOCKED" : 1 << 1,
       "OFPPS_LIVE" : 1 << 2,
     }
-    self.assertTrue("ofp_port_state_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_port_state_map, "Const %s not in ofp_port_state_map" % expected)
-      self.assertEquals(ofp_port_state_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_state_map[expected]))
+    testobj = "ofp_port_state_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_port_no(self):
     testpairs = {
@@ -95,10 +96,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPP_LOCAL" : 0xfffffffe,
       "OFPP_ANY" : 0xffffffff,
     }
-    self.assertTrue("ofp_port_no_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_port_no_map, "Const %s not in ofp_port_no_map" % expected)
-      self.assertEquals(ofp_port_no_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_no_map[expected]))
+    testobj = "ofp_port_no_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_port_features(self):
     testpairs = {
@@ -119,10 +118,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPPF_PAUSE" : 1 << 14,
       "OFPPF_PAUSE_ASYM" : 1 << 15,
     }
-    self.assertTrue("ofp_port_features_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_port_features_map, "Const %s not in ofp_port_features_map" % expected)
-      self.assertEquals(ofp_port_features_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_port_features_map[expected]))
+    testobj = "ofp_port_features_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_queue_properties(self):
     testpairs = {
@@ -130,20 +127,16 @@ class ofp_const_test(unittest.TestCase):
       "OFPQT_MAX_RATE" : 2,
       "OFPQT_EXPERIMENTER" : 0xffff,
     }
-    self.assertTrue("ofp_queue_properties_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_queue_properties_map, "Const %s not in ofp_queue_properties_map" % expected)
-      self.assertEquals(ofp_queue_properties_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_queue_properties_map[expected]))
+    testobj = "ofp_queue_properties_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_match_type(self):
     testpairs = {
       "OFPMT_STANDARD" : 0,
       "OFPMT_OXM" : 1,
     }
-    self.assertTrue("ofp_match_type_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_match_type_map, "Const %s not in ofp_match_type_map" % expected)
-      self.assertEquals(ofp_match_type_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_match_type_map[expected]))
+    testobj = "ofp_match_type_map"
+    self.runtests(testpairs, testobj)
   
   def test_ofp_oxm_class(self):
     testpairs = {
@@ -152,10 +145,8 @@ class ofp_const_test(unittest.TestCase):
       "OFPXMC_NXM_OPENFLOW_BASIC" : 0x8000,
       "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
     }
-    self.assertTrue("ofp_oxm_class_map" in globals())
-    for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in ofp_oxm_class_map, "Const %s not in ofp_oxm_class_map" % expected)
-      self.assertEquals(ofp_oxm_class_map[expected], const, "Const %s should be %s, but is %s" % (const, expected, ofp_oxm_class_map[expected]))
+    testobj = "ofp_oxm_class_map"
+    self.runtests(testpairs, testobj)
 
 class ofp_match_test(unittest.TestCase):
   
