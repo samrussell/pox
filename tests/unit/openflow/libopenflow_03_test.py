@@ -8,7 +8,7 @@ from copy import copy
 sys.path.append(os.path.dirname(__file__) + "/../../..")
 
 from pox.openflow_12.libopenflow_03 import *
-from pox.datapaths.switch_02 import *
+from pox.datapaths.switch_03 import *
 
 from pox.lib.packet import *
 
@@ -206,7 +206,6 @@ class ofp_command_test(unittest.TestCase):
     ofp_hello: OFPT_HELLO,
     ofp_echo_request: OFPT_ECHO_REQUEST,
     ofp_echo_reply: OFPT_ECHO_REPLY,
-    ofp_vendor: OFPT_VENDOR,
     ofp_features_request: OFPT_FEATURES_REQUEST,
     ofp_get_config_request: OFPT_GET_CONFIG_REQUEST,
     ofp_get_config_reply: OFPT_GET_CONFIG_REPLY,

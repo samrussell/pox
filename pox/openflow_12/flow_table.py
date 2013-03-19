@@ -6,7 +6,7 @@ Implementation of an OpenFlow flow table
 
 """
 from collections import namedtuple
-from libopenflow_02 import *
+from libopenflow_03 import *
 from pox.lib.revent import *
 
 import time
