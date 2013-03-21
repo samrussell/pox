@@ -30,7 +30,7 @@ class ofp_const_test(unittest.TestCase):
   
   def runtests(self, testpairs, testobj):
     self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
-    testmap = globals()[testobj]
+    testmap = globals()["%s_map" % testobj]
     for const, expected in testpairs.iteritems():
       self.assertTrue(expected in testmap, "Const %s not in %s" % (expected, testobj))
       self.assertEquals(testmap[expected], const, "Const %s should be %s, but %s is" % (const, expected, testmap[expected]))
@@ -65,7 +65,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPT_ROLE_REQUEST" : 24,
       "OFPT_ROLE_REPLY" : 25,
     }
-    testobj = "ofp_type_map"
+    testobj = "ofp_type"
     self.runtests(testpairs, testobj)
   
   def test_ofp_port_config(self):
@@ -75,7 +75,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPPC_NO_FWD" : 1 << 5,
       "OFPPC_NO_PACKET_IN" : 1 << 6,
     }
-    testobj = "ofp_port_config_map"
+    testobj = "ofp_port_config"
     self.runtests(testpairs, testobj)
   
   def test_ofp_port_state(self):
@@ -84,7 +84,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPPS_BLOCKED" : 1 << 1,
       "OFPPS_LIVE" : 1 << 2,
     }
-    testobj = "ofp_port_state_map"
+    testobj = "ofp_port_state"
     self.runtests(testpairs, testobj)
   
   def test_ofp_port_no(self):
@@ -99,7 +99,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPP_LOCAL" : 0xfffffffe,
       "OFPP_ANY" : 0xffffffff,
     }
-    testobj = "ofp_port_no_map"
+    testobj = "ofp_port_no"
     self.runtests(testpairs, testobj)
   
   def test_ofp_port_features(self):
@@ -121,7 +121,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPPF_PAUSE" : 1 << 14,
       "OFPPF_PAUSE_ASYM" : 1 << 15,
     }
-    testobj = "ofp_port_features_map"
+    testobj = "ofp_port_features"
     self.runtests(testpairs, testobj)
   
   def test_ofp_queue_properties(self):
@@ -130,7 +130,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPQT_MAX_RATE" : 2,
       "OFPQT_EXPERIMENTER" : 0xffff,
     }
-    testobj = "ofp_queue_properties_map"
+    testobj = "ofp_queue_properties"
     self.runtests(testpairs, testobj)
   
   def test_ofp_match_type(self):
@@ -138,7 +138,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPMT_STANDARD" : 0,
       "OFPMT_OXM" : 1,
     }
-    testobj = "ofp_match_type_map"
+    testobj = "ofp_match_type"
     self.runtests(testpairs, testobj)
   
   def test_ofp_oxm_class(self):
@@ -148,7 +148,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPXMC_NXM_OPENFLOW_BASIC" : 0x8000,
       "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
     }
-    testobj = "ofp_oxm_class_map"
+    testobj = "ofp_oxm_class"
     self.runtests(testpairs, testobj)
   
   def test_ofp_oxm_class(self):
@@ -158,7 +158,7 @@ class ofp_const_test(unittest.TestCase):
       "OFPXMC_NXM_OPENFLOW_BASIC" : 0x8000,
       "OFPXMC_NXM_EXPERIMENTER" : 0xFFFF,
     }
-    testobj = "ofp_oxm_class_map"
+    testobj = "ofp_oxm_class"
     self.runtests(testpairs, testobj)
   
   def test_ofp_oxm_ofb_match_field(self):
@@ -250,6 +250,330 @@ class ofp_const_test(unittest.TestCase):
       "OFPCML_NO_BUFFER" : 0xffff,
     }
     testobj = "ofp_controller_max_len"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_capabilities(self):
+    testpairs = {
+      "OFPC_FLOW_STATS" : 0,
+      "OFPC_TABLE_STATS" : 1,
+      "OFPC_PORT_STATS" : 2,
+      "OFPC_GROUP_STATS" : 3,
+      "OFPC_IP_REASM" : 5,
+      "OFPC_QUEUE_STATS" : 6,
+      "OFPC_PORT_BLOCKED" : 8,
+    }
+    testobj = "ofp_capabilities"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_config_flags(self):
+    testpairs = {
+      "OFPC_FRAG_NORMAL" : 0,
+      "OFPC_FRAG_DROP" : 1 << 0,
+      "OFPC_FRAG_REASM" : 1 << 1,
+      "OFPC_FRAG_MASK" : 3,
+      "OFPC_INVALID_TTL_TO_CONTROLLER" : 1 << 2,
+    }
+    testobj = "ofp_config_flags"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_table(self):
+    testpairs = {
+      "OFPTT_MAX" : 0xfe,
+      "OFPTT_ALL" : 0xff,
+    }
+    testobj = "ofp_table"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_table_config(self):
+    testpairs = {
+      "OFPTC_TABLE_MISS_CONTROLLER" : 0,
+      "OFPTC_TABLE_MISS_CONTINUE" : 1 << 0,
+      "OFPTC_TABLE_MISS_DROP" : 1 << 1,
+      "OFPTC_TABLE_MISS_MASK" : 3,
+    }
+    testobj = "ofp_table_config"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_flow_mod_command(self):
+    testpairs = {
+      "OFPFC_ADD" : 0,
+      "OFPFC_MODIFY" : 1,
+      "OFPFC_MODIFY_STRICT" : 2,
+      "OFPFC_DELETE" : 3,
+      "OFPFC_DELETE_STRICT" : 4,
+    }
+    testobj = "ofp_flow_mod_command"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_flow_mod_flags(self):
+    testpairs = {
+      "OFPFF_SEND_FLOW_REM" : 1 << 0,
+      "OFPFF_CHECK_OVERLAP" : 1 << 1,
+      "OFPFF_RESET_COUNTS" : 1 << 2,
+    }
+    testobj = "ofp_flow_mod_flags"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_flow_mod_flags(self):
+    testpairs = {
+      "OFPFF_SEND_FLOW_REM" : 1 << 0,
+      "OFPFF_CHECK_OVERLAP" : 1 << 1,
+      "OFPFF_RESET_COUNTS" : 1 << 2,
+    }
+    testobj = "ofp_flow_mod_flags"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_group_mod_command(self):
+    testpairs = {
+      "OFPGC_ADD" : 0,
+      "OFPGC_MODIFY" : 1,
+      "OFPGC_DELETE" : 2,
+    }
+    testobj = "ofp_group_mod_command"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_group_type(self):
+    testpairs = {
+      "OFPGT_ALL" : 0,
+      "OFPGT_SELECT" : 1,
+      "OFPGT_INDIRECT" : 2,
+      "OFPGT_FF" : 3,
+    }
+    testobj = "ofp_group_type"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_stats_types(self):
+    testpairs = {
+      "OFPST_DESC" : 0,
+      "OFPST_FLOW" : 1,
+      "OFPST_AGGREGATE" : 2,
+      "OFPST_TABLE" : 3,
+      "OFPST_PORT" : 4,
+      "OFPST_QUEUE" : 5,
+      "OFPST_GROUP" : 6,
+      "OFPST_GROUP_DESC" : 7,
+      "OFPST_GROUP_FEATURES" : 8,
+      "OFPST_EXPERIMENTER" : 0xffff,
+    }
+    testobj = "ofp_stats_types"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_group_capabilities(self):
+    testpairs = {
+      "OFPGFC_SELECT_WEIGHT" : 1 << 0,
+      "OFPGFC_SELECT_LIVENESS" : 1 << 1,
+      "OFPGFC_CHAINING" : 1 << 2,
+      "OFPGFC_CHAINING_CHECKS" : 1 << 3,
+    }
+    testobj = "ofp_group_capabilities"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_controller_role(self):
+    testpairs = {
+      "OFPCR_ROLE_NOCHANGE" : 0,
+      "OFPCR_ROLE_EQUAL" : 1,
+      "OFPCR_ROLE_MASTER" : 2,
+      "OFPCR_ROLE_SLAVE" : 3,
+    }
+    testobj = "ofp_controller_role"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_packet_in_reason(self):
+    testpairs = {
+      "OFPR_NO_MATCH" : 0,
+      "OFPR_ACTION" : 1,
+      "OFPR_INVALID_TTL" : 2,
+    }
+    testobj = "ofp_packet_in_reason"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_flow_removed_reason(self):
+    testpairs = {
+      "OFPRR_IDLE_TIMEOUT" : 0,
+      "OFPRR_HARD_TIMEOUT" : 1,
+      "OFPRR_DELETE" : 2,
+      "OFPRR_GROUP_DELETE" : 3,
+    }
+    testobj = "ofp_flow_removed_reason"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_port_reason(self):
+    testpairs = {
+      "OFPPR_ADD" : 0,
+      "OFPPR_DELETE" : 1,
+      "OFPPR_MODIFY" : 2,
+    }
+    testobj = "ofp_port_reason"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_error_type(self):
+    testpairs = {
+      "OFPET_HELLO_FAILED" : 0,
+      "OFPET_BAD_REQUEST" : 1,
+      "OFPET_BAD_ACTION" : 2,
+      "OFPET_BAD_INSTRUCTION" : 3,
+      "OFPET_BAD_MATCH" : 4,
+      "OFPET_FLOW_MOD_FAILED" : 5,
+      "OFPET_GROUP_MOD_FAILED" : 6,
+      "OFPET_PORT_MOD_FAILED" : 7,
+      "OFPET_TABLE_MOD_FAILED" : 8,
+      "OFPET_QUEUE_OP_FAILED" : 9,
+      "OFPET_SWITCH_CONFIG_FAILED" : 10,
+      "OFPET_ROLE_REQUEST_FAILED" : 11,
+      "OFPET_EXPERIMENTER" : 0xffff,
+    }
+    testobj = "ofp_error_type"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_hello_failed_code(self):
+    testpairs = {
+      "OFPHFC_INCOMPATIBLE" : 0,
+      "OFPHFC_EPERM" : 1,
+    }
+    testobj = "ofp_hello_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_bad_request_code(self):
+    testpairs = {
+      "OFPBRC_BAD_VERSION" : 0,
+      "OFPBRC_BAD_TYPE" : 1,
+      "OFPBRC_BAD_STAT" : 2,
+      "OFPBRC_BAD_EXPERIMENTER" : 3,
+      "OFPBRC_BAD_EXP_TYPE" : 4,
+      "OFPBRC_EPERM" : 5,
+      "OFPBRC_BAD_LEN" : 6,
+      "OFPBRC_BUFFER_EMPTY" : 7,
+      "OFPBRC_BUFFER_UNKNOWN" : 8,
+      "OFPBRC_BAD_TABLE_ID" : 9,
+      "OFPBRC_IS_SLAVE" : 10,
+      "OFPBRC_BAD_PORT" : 11,
+      "OFPBRC_BAD_PACKET" : 12,
+    }
+    testobj = "ofp_bad_request_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_bad_instruction_code(self):
+    testpairs = {
+      "OFPBIC_UNKNOWN_LIST" : 0,
+      "OFPBIC_UNSUP_INST" : 1,
+      "OFPBIC_BAD_TABLE_ID" : 2,
+      "OFPBIC_UNSUP_METADATA" : 3,
+      "OFPBIC_UNSUP_METADATA_MASK" : 4,
+      "OFPBIC_BAD_EXPERIMENTER" : 5,
+      "OFPBIC_BAD_EXP_TYPE" : 6,
+      "OFPBIC_BAD_LEN" : 7,
+      "OFPBIC_EPERM" : 8,
+    }
+    testobj = "ofp_bad_instruction_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_bad_match_code(self):
+    testpairs = {
+      "OFPBMC_BAD_TYPE" : 0,
+      "OFPBMC_BAD_LEN" : 1,
+      "OFPBMC_BAD_TAG" : 2,
+      "OFPBMC_BAD_DL_ADDR_MASK" : 3,
+      "OFPBMC_BAD_NW_ADDR_MASK" : 4,
+      "OFPBMC_BAD_WILDCARDS" : 5,
+      "OFPBMC_BAD_FIELD" : 6,
+      "OFPBMC_BAD_VALUE" : 7,
+      "OFPBMC_BAD_MASK" : 8,
+      "OFPBMC_BAD_PREREQ" : 9,
+      "OFPBMC_DUP_FIELD" : 10,
+      "OFPBMC_EPERM" : 11,
+    }
+    testobj = "ofp_bad_match_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_flow_mod_failed_code(self):
+    testpairs = {
+      "OFPFMFC_UNKNOWN" : 0,
+      "OFPFMFC_TABLE_FULL" : 1,
+      "OFPFMFC_BAD_TABLE_ID" : 2,
+      "OFPFMFC_OVERLAP" : 3,
+      "OFPFMFC_EPERM" : 4,
+      "OFPFMFC_BAD_TIMEOUT" : 5,
+      "OFPFMFC_BAD_COMMAND" : 6,
+      "OFPFMFC_BAD_FLAGS" : 7,
+    }
+    testobj = "ofp_flow_mod_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_group_mod_failed_code(self):
+    testpairs = {
+      "OFPGMFC_GROUP_EXISTS" : 0,
+      "OFPGMFC_INVALID_GROUP" : 1,
+      "OFPGMFC_WEIGHT_UNSUPPORTED" : 2,
+      "OFPGMFC_OUT_OF_GROUPS" : 3,
+      "OFPGMFC_OUT_OF_BUCKETS" : 4,
+      "OFPGMFC_CHAINING_UNSUPPORTED" : 5,
+      "OFPGMFC_WATCH_UNSUPPORTED" : 6,
+      "OFPGMFC_LOOP" : 7,
+      "OFPGMFC_UNKNOWN_GROUP" : 8,
+      "OFPGMFC_CHAINED_GROUP" : 9,
+      "OFPGMFC_BAD_TYPE" : 10,
+      "OFPGMFC_BAD_COMMAND" : 11,
+      "OFPGMFC_BAD_BUCKET" : 12,
+      "OFPGMFC_BAD_WATCH" : 13,
+      "OFPGMFC_EPERM" : 14,
+    }
+    testobj = "ofp_group_mod_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_port_mod_failed_code(self):
+    testpairs = {
+      "OFPPMFC_BAD_PORT" : 0,
+      "OFPPMFC_BAD_HW_ADDR" : 1,
+      "OFPPMFC_BAD_CONFIG" : 2,
+      "OFPPMFC_BAD_ADVERTISE" : 3,
+      "OFPPMFC_EPERM" : 4,
+    }
+    testobj = "ofp_port_mod_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_table_mod_failed_code(self):
+    testpairs = {
+      "OFPTMFC_BAD_TABLE" : 0,
+      "OFPTMFC_BAD_CONFIG" : 1,
+      "OFPTMFC_EPERM" : 2,
+    }
+    testobj = "ofp_table_mod_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_queue_op_failed_code(self):
+    testpairs = {
+      "OFPQOFC_BAD_PORT" : 0,
+      "OFPQOFC_BAD_QUEUE" : 1,
+      "OFPQOFC_EPERM" : 2,
+    }
+    testobj = "ofp_queue_op_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_switch_config_failed_code(self):
+    testpairs = {
+      "OFPSCFC_BAD_FLAGS" : 0,
+      "OFPSCFC_BAD_LEN" : 1,
+      "OFPSCFC_EPERM" : 2,
+    }
+    testobj = "ofp_switch_config_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_role_request_failed_code(self):
+    testpairs = {
+      "OFPRRF_STALE" : 0,
+      "OFPRRF_UNSUP" : 1,
+      "OFPRRF_BAD_ROLE" : 2,
+    }
+    testobj = "ofp_role_request_failed_code"
+    self.runtests(testpairs, testobj)
+  
+  def test_ofp_role_request_failed_code(self):
+    testpairs = {
+      "OFPRRF_STALE" : 0,
+      "OFPRRF_UNSUP" : 1,
+      "OFPRRF_BAD_ROLE" : 2,
+    }
+    testobj = "ofp_role_request_failed_code"
     self.runtests(testpairs, testobj)
 
 class ofp_match_test(unittest.TestCase):
