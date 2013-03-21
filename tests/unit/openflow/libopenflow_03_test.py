@@ -21,6 +21,32 @@ def extract_num(buf, start, length):
     val += ord(buf[i])
   return val
 
+class ofp_message_test(unittest.TestCase):
+  # test each message to see if it behaves how it should
+  # each of these should be its own class so check sizes of things
+  # maybe do pack/unpack here?
+  
+  def build_header(self, header_type):
+    return ofp_header(header_type)
+    
+  
+  def test_ofp_switch_features(self):
+    # spec defines as so:
+    # struct ofp_header header
+    # unit64_t datapath_id
+    # unit32_t n_buffers
+    # uint8_t n_tables
+    # uint8_t pad[3]
+    # uint32_t capabilities
+    # uint32_t reserved
+    # struct ofp_port ports[0]
+    #header = self.build_header(ofp_type["OFPT_FEATURES_REPLY"])
+    # make some random number of ports
+    #ports
+  
+  def test_ofp_switch_features(self):
+    
+    
 
 class ofp_const_test(unittest.TestCase):
   # get this test to check all constants
@@ -32,7 +58,7 @@ class ofp_const_test(unittest.TestCase):
     self.assertTrue(testobj in globals(), "Map %s isn't defined" % testobj)
     testmap = globals()["%s_map" % testobj]
     for const, expected in testpairs.iteritems():
-      self.assertTrue(expected in testmap, "Const %s not in %s" % (expected, testobj))
+      self.assertTrue(expected in testmap, "Const %s not in %s" % (const, testobj))
       self.assertEquals(testmap[expected], const, "Const %s should be %s, but %s is" % (const, expected, testmap[expected]))
     
   
@@ -567,7 +593,7 @@ class ofp_const_test(unittest.TestCase):
     testobj = "ofp_role_request_failed_code"
     self.runtests(testpairs, testobj)
   
-  def test_ofp_role_request_failed_code(self):
+  def test_ofp_error_experimenter_msg(self):
     testpairs = {
       "OFPRRF_STALE" : 0,
       "OFPRRF_UNSUP" : 1,
@@ -575,6 +601,7 @@ class ofp_const_test(unittest.TestCase):
     }
     testobj = "ofp_role_request_failed_code"
     self.runtests(testpairs, testobj)
+
 
 class ofp_match_test(unittest.TestCase):
   

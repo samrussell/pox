@@ -4012,6 +4012,9 @@ class ofp_barrier_reply (ofp_header):
     outstr += ofp_header.show(self, prefix + '  ')
     return outstr
 
+# copy barrier request to make role request
+#@openflow_s_message("OFPT_ROLE_REQUEST", 24,
+#    request_for="ofp_role_reply")
 
 @openflow_s_message("OFPT_BARRIER_REQUEST", 20,
     request_for="ofp_barrier_reply")
